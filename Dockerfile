@@ -8,9 +8,9 @@
     COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
     RUN npm install --production --silent
     
-    # Copy the full app and build it
+    # Copy the full app and build it with increased memory
     COPY . .
-    RUN npm run build
+    RUN NODE_OPTIONS="--max-old-space-size=6144" npm run build
     
     # -------- Stage 2: Serve with Apache --------
     FROM httpd:alpine
@@ -20,6 +20,4 @@
     
     # Expose Apache port
     EXPOSE 80
-    
-    # Apache runs by default in httpd:alpine
     
