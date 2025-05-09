@@ -294,9 +294,9 @@ const handleContentFileChange = async (
           Questions: courseData.quiz.Questions
         }]
       };
-
+      const token = localStorage.getItem('token');
       await axios.post('http://localhost:5135/api/courses', payload, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json','Authorization': `Bearer ${token}` }
       });
       navigate('/i');
     } catch (error) {

@@ -23,7 +23,7 @@ interface AdminStats {
 }
 
 interface MenuItem {
-  id: 'dashboard' | 'users' | 'courses' | 'analytics' | 'approvals' | 'notifications' | 'system' | 'settings';
+  id: 'dashboard' | 'users' | 'courses' | 'analytics' | 'approvals' | 'system' | 'settings';
   icon: IconType;
   label: string;
   count?: number;
@@ -32,7 +32,7 @@ interface MenuItem {
 }
 
 const AdminDashboardSidebar: React.FC = () => {
-  const [activeItem, setActiveItem] = useState<'dashboard' | 'users' | 'courses' | 'analytics' | 'approvals' | 'notifications' | 'system' | 'settings'>('dashboard');
+  const [activeItem, setActiveItem] = useState<'dashboard' | 'users' | 'courses' | 'analytics' | 'approvals' | 'system' | 'settings'>('dashboard');
   const [adminStats, setAdminStats] = useState<AdminStats>({
     totalUsers: 0,
     activeCourses: 0,
@@ -56,7 +56,7 @@ const AdminDashboardSidebar: React.FC = () => {
     const fetchAdminStats = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5135/api/Admin/stats', {
+        const response = await fetch('http://localhost:5135/api/Admin/analytics', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -65,7 +65,7 @@ const AdminDashboardSidebar: React.FC = () => {
           const data = await response.json();
           setAdminStats({
             totalUsers: data.totalUsers,
-            activeCourses: data.activeCourses,
+            activeCourses: data.totalCourses,
             pendingApprovals: data.pendingApprovals
           });
           setNotificationCount(data.pendingNotifications);
@@ -84,7 +84,7 @@ const AdminDashboardSidebar: React.FC = () => {
     { id: 'courses', icon: FaBookOpen, label: 'Gestion des Cours', count: adminStats.activeCourses },
     { id: 'analytics', icon: MdAnalytics, label: 'Analytiques' },
     { id: 'approvals', icon: FaClipboardList, label: 'Approbations', notification: adminStats.pendingApprovals },
-    { id: 'notifications', icon: FaBell, label: 'Notifications', notification: notificationCount },
+  
     { id: 'system', icon: FaTools, label: 'Système', isRestricted: true },
     { id: 'settings', icon: FaCog, label: 'Paramètres' },
   ];
@@ -95,7 +95,6 @@ const AdminDashboardSidebar: React.FC = () => {
     courses: '/admin/courses',
     analytics: '/admin/analytics',
     approvals: '/admin/approvals',
-    notifications: '/admin/notifications',
     system: '/admin/system',
     settings: '/admin/settings',
   };

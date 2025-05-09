@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import {
@@ -7,6 +7,7 @@ import {
   FaBookmark,
   FaCheck,
   FaLightbulb,
+  FaChevronLeft,
 } from "react-icons/fa";
 
 interface WebContentProps {
@@ -28,7 +29,7 @@ const WebContentViewer: React.FC<WebContentProps> = (props) => {
   
   const location = useLocation();
   const stateContent = (location.state as any)?.content;
- 
+   const navigate = useNavigate();
   const content = stateContent || props.content;
   const type = props.type; 
 
@@ -65,8 +66,21 @@ const WebContentViewer: React.FC<WebContentProps> = (props) => {
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-4">
+       <motion.div
+                          initial={{ opacity: 0, y: 0 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center "
+                        >
+                          <button
+                            onClick={() => navigate(-1)}
+                            className="mr-3 text-gray-600 hover:text-gray-900"
+                          >
+                            <FaChevronLeft size={20} />
+                          </button>
+                          
+                        </motion.div>
         <h1 className="text-xl font-semibold text-gray-900">{content.title}</h1>
-        <p className="text-sm text-gray-600 mt-1">{String(content.completed)}</p>
+       
       </div>
 
       {/* Main Content Area */}

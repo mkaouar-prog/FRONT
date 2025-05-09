@@ -114,7 +114,8 @@ const CourseDiscoveryPage: React.FC = () => {
         { courseId, eleveProfileId: user.id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert('Inscription réussie !');
+      alert("Inscription avec Succées")
+      navigate('/dashboard/courses');
     } catch (e) {
       console.error(e);
       alert("Une erreur est survenue lors de l'inscription.");

@@ -7,14 +7,14 @@ import { useAuth } from 'hooks/useAuth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface MenuItem {
-  id: 'dashboard' | 'addCourse' | 'settings' | 'chatbot';
+  id: 'dashboard' | 'addCourse' | 'chatbot';
   icon: IconType;
   label: string;
   count?: number;
 }
 
 const DashboardSidebar: React.FC = () => {
-  const [activeItem, setActiveItem] = useState<'dashboard' | 'addCourse' | 'settings' | 'chatbot'>('dashboard');
+  const [activeItem, setActiveItem] = useState<'dashboard' | 'addCourse' | 'chatbot'>('dashboard');
   const [courseCount, setCourseCount] = useState<number>(0);
   const { user } = useAuth();
   const instructorId = user?.id;
@@ -41,8 +41,6 @@ const DashboardSidebar: React.FC = () => {
       setActiveItem('dashboard');
     } else if (location.pathname.includes('/i/add-course')) {
       setActiveItem('addCourse');
-    } else if (location.pathname.includes('/i/settings')) {
-      setActiveItem('settings');
     } else if (location.pathname.includes('/i/chatbot')) {
       setActiveItem('chatbot');
     }
@@ -51,7 +49,6 @@ const DashboardSidebar: React.FC = () => {
   const menuItems: MenuItem[] = [
     { id: 'dashboard', icon: FaBook, label: 'Mes Cours', count: courseCount },
     { id: 'addCourse', icon: FaPlus, label: 'Ajouter un Cours' },
-    { id: 'settings', icon: FaCog, label: 'Paramètres' },
     { id: 'chatbot', icon: FaRobot, label: 'Assistant IA' },
   ];
 
@@ -59,7 +56,6 @@ const DashboardSidebar: React.FC = () => {
   const routeMapping: Record<MenuItem["id"], string> = {
     dashboard: '/i',
     addCourse: '/i/add-course',
-    settings: '/i/settings',
     chatbot: '/i/chatbot',
   };
 
@@ -75,7 +71,7 @@ const DashboardSidebar: React.FC = () => {
         <div className="flex items-center space-x-4">
           <div className="relative">
             <img
-              src="assets/p.png"
+              src="http://localhost:3000/assets/p.png"
               alt="Profile"
               className="w-12 h-12 rounded-full object-cover border-2 border-purple-500"
             />

@@ -55,7 +55,9 @@ const DashboardContent: React.FC = () => {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5135/api/courses/instructor/${user.id}`);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5135/api/Courses/instructor`, 
+          { headers: { 'Authorization': `Bearer ${token}` } });
         const data = response.data;
         if (Array.isArray(data)) {
           setCourses(data.reverse());

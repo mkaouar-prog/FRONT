@@ -61,7 +61,7 @@ const CoursesPage: React.FC = () => {
               lastAccessed: enrollment.enrollmentDate
             };
           });
-          setEnrolledCourses(courses);
+          setEnrolledCourses(courses.reverse());
           setTotalStudyHours(Number(data.totalStudyHours.toFixed(1)));
           setTotalCertificatesObtained(data.totalCertificatesObtained);
           setTotalCoursesCompleted(data.totalCoursesCompleted);

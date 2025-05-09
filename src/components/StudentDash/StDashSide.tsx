@@ -176,7 +176,7 @@ const StudentDashboardSidebar: React.FC = () => {
         <div className="space-y-1 relative">
           {menuItems.map(item => {
             const restricted = item.id === 'chatbot' || item.id === 'schedule';
-            const isPro = subscription?.type === 'pro';
+            const isPro = subscription?.type === 'pro' && subscription.status == 'Approved';
             const disabled = restricted && !isPro;
 
             return (
