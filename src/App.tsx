@@ -40,6 +40,8 @@ import SubscriptionApprovals from "pages/AdminDash/SubscriptionApprovals";
 import RequireAuth from "hooks/RequireAuth";
 import Unauthorized from "hooks/Unauthorized";
 import NotificationsPage from "pages/StudentDash/NotificationsPage";
+import EditCourse from "components/InstructorDash/EditCourse";
+import { Edit } from "@mui/icons-material";
 
 
 
@@ -194,7 +196,7 @@ const App: React.FC = () => {
           <Route path="add-course" element={<AddCourse />} />
           <Route path="dashboard" element={<InstructorDashboard />} />
           <Route path="live/:courseId" element={<LiveMeetingsCalendar />} />
-
+          <Route path="edit-course/:id" element={<EditCourse />} />
           <Route path="chatbot" element={<Chatbot />} />
         </Route>
         </Route>

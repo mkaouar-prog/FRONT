@@ -120,6 +120,28 @@ const DashboardContent: React.FC = () => {
     setSelectedQuizzes([]);
   };
 
+    // Navigate to Edit Course page
+    const handleEdit = (courseId: number) => navigate(`/i/edit-course/${courseId}`);
+
+    // Delete course
+    const handleDelete = async (courseId: number) => {
+      const ok = window.confirm('Are you sure you want to delete this course?');
+      if (!ok) return;
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`http://localhost:5135/api/Courses/${courseId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setCourses(prev => prev.filter(c => c.id !== courseId));
+      } catch (err: any) {
+        console.error(err);
+        setError(err.response?.data || err.message);
+      }
+    };
+
+
+
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -175,31 +197,63 @@ const DashboardContent: React.FC = () => {
                   <img src={course.imageUrl} alt={course.title} className="absolute h-full w-full object-cover" />
                 </div>
                 <div className="p-6">
-                  <h2 className="text-xl font-semibold text-gray-900 line-clamp-1">{course.title}</h2>
-                  <p className="mt-2 text-gray-600 text-sm line-clamp-2">{course.description}</p>
+  <h2 className="text-xl font-semibold text-gray-900 line-clamp-1">{course.title}</h2>
+  <p className="mt-2 text-gray-600 text-sm line-clamp-2">{course.description}</p>
 
-                  <div className="mt-6 flex space-x-3">
-                    <button
-                      onClick={() => handleOpenChapters(course.id)}
-                      className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-purple-600 text-sm font-medium rounded-md text-purple-600 hover:bg-purple-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                    >
-                      Chapters
-                    </button>
-                    <button
-                      onClick={() => handleOpenQuizzes(course.id)}
-                      className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-green-600 text-sm font-medium rounded-md text-green-600 hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                    >
-                      Quizzes
-                    </button>
-                    <button
-                      onClick={() => navigate(`live/${course.id}`)}
-                      className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                    >
-                      Schedule Live
-                    </button>
-                    
-                  </div>
-                </div>
+  <div className="mt-6 grid grid-cols-2 md:grid-cols-3 gap-3">
+    <button
+      onClick={() => handleOpenChapters(course.id)}
+      className="inline-flex justify-center items-center px-4 py-2.5 border border-purple-600 text-sm font-medium rounded-lg text-purple-600 hover:bg-purple-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+    >
+      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+      Chapters
+    </button>
+    
+    <button
+      onClick={() => handleOpenQuizzes(course.id)}
+      className="inline-flex justify-center items-center px-4 py-2.5 border border-green-600 text-sm font-medium rounded-lg text-green-600 hover:bg-green-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+    >
+      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+      </svg>
+      Quizzes
+    </button>
+    
+    <button
+      onClick={() => navigate(`live/${course.id}`)}
+      className="inline-flex justify-center items-center px-4 py-2.5 border border-blue-600 text-sm font-medium rounded-lg text-blue-600 hover:bg-blue-50 hover:shadow-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+      Schedule Live
+    </button>
+  </div>
+
+  <div className="mt-4 flex justify-end space-x-3">
+    <button
+      onClick={() => handleEdit(course.id)}
+      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200"
+    >
+      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      </svg>
+      Edit
+    </button>
+    
+    <button
+      onClick={() => handleDelete(course.id)}
+      className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-red-600 transition-colors duration-200"
+    >
+      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+      Delete
+    </button>
+  </div>
+</div>
               </div>
             ))}
           </div>
